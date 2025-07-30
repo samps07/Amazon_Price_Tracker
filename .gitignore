@@ -1,4 +1,5 @@
 # Python-specific ignores
+.env
 __pycache__/           # Python compiled bytecode files
 *.pyc                  # Individual compiled Python files
 *.pyo                  # Optimized Python bytecode files
