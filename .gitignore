@@ -1,0 +1,22 @@
+# Python-specific ignores
+__pycache__/           # Python compiled bytecode files
+*.pyc                  # Individual compiled Python files
+*.pyo                  # Optimized Python bytecode files
+*.pyd                  # Python dynamic modules
+
+# Environment variables
+.env                   # Your .env file with sensitive data (BOT_TOKEN, CHAT_ID)
+
+# Local development files
+*.log                  # Log files generated during testing
+*.cache                # Cache files
+.pytest_cache/         # Pytest cache directory (if you use pytest)
+
+# System-specific files
+.DS_Store              # macOS Finder metadata
+Thumbs.db              # Windows thumbnail cache
+
+# IDE-specific files (optional, add based on your editor)
+.vscode/               # VS Code settings
+.idea/                 # PyCharm/IntelliJ settings
+*.sublime-*            # Sublime Text files
