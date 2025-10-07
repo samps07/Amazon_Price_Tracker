@@ -13,11 +13,9 @@ BOT_USERNAME = os.environ.get("BOT_USERNAME", "YourBotUsername")
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET", "dev-secret")
 
-CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "300"))
-
 def get_conn():
     """Return a new psycopg2 connection (sslmode required on Render)."""
-    return psycopg2.connect(DATABASE_URL, sslmode="require")
+    return psycopg2.connect(DATABASE_URL)
 
 def init_db():
     """Create tracks table if missing."""
@@ -39,6 +37,14 @@ def init_db():
             )
             """)
         conn.commit()
+
+# --- THIS IS THE FIX ---
+# Ensure the DB table exists as soon as the app starts.
+init_db()
+# --------------------
+
+CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "300"))
+
 
 def insert_pending_track(title, url, image, current_price, target):
     """Insert a pending track and return the token for deep-linking."""
@@ -91,11 +97,10 @@ def track():
     tg_link = f"https://t.me/{BOT_USERNAME}?start={token}"
     return redirect(tg_link)
 
+# This block is now only used for running the app on your local machine
 if __name__ == "__main__":
-    # Ensure DB exists / table ready
     if not DATABASE_URL:
         raise RuntimeError("DATABASE_URL not set. Set it in env (Render provides it).")
-    init_db()
     port = int(os.environ.get("PORT", 5000))
     # Bind to 0.0.0.0 for hosting services
     app.run(host="0.0.0.0", port=port, debug=(os.environ.get("FLASK_DEBUG", "0") == "1"))
